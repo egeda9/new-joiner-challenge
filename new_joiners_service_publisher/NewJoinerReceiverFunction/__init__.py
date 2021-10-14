@@ -8,6 +8,7 @@ import pika
 import docx2txt
 import json
 from json import JSONEncoder
+import yaml
 
 ALLOWED_EXTENSIONS = {'pdf', 'docx'}
 
@@ -19,6 +20,13 @@ class Ner:
 class NerEncoder(JSONEncoder):
         def default(self, o):
             return o.__dict__
+        
+def get_config():
+    
+    with open("config.yml", "r") as config:
+        content = yaml.load(config)
+        
+    return content
 
 def get_ner(text):
 
@@ -49,7 +57,8 @@ def read_pdf(file):
 
 def send_message(message):
     
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    config = get_config()
+    connection = pika.BlockingConnection(pika.ConnectionParameters(config["server"]["broker"]))
     channel = connection.channel()
 
     channel.queue_declare(queue='joiner')

@@ -1,0 +1,7 @@
+# Database credentials
+database:
+  server: "localhost"
+  port: 1433
+  user: "sa"
+  pass: "xxxxxxx"
+  dbname: "NewJoiner"
