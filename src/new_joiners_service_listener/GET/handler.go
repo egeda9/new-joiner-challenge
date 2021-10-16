@@ -36,7 +36,7 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/api/NewJoinerFunction", requestHandler)
+	mux.HandleFunc("/api/Joiner", requestHandler)
 
 	err := http.ListenAndServe(":5006", mux)
 	log.Fatal(err)

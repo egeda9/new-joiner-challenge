@@ -21,11 +21,12 @@ type Config struct {
 }
 
 type Joiner struct {
-	Id        int
-	Name      string
-	Stack     string
-	Role      string
-	Languages string
+	Id                             int
+	Name                           string
+	Stack                          string
+	Role                           string
+	Languages                      string
+	JoinerMessageAcknowledgementId int
 }
 
 func configReader() Config {
@@ -50,7 +51,7 @@ func configReader() Config {
 }
 
 // UpdateJoiner update a record status
-func (j Joiner) UpdateJoiner() (int64, error) {
+func (j Joiner) UpdateJoiner(id int) (int64, error) {
 
 	config := configReader()
 
@@ -67,7 +68,7 @@ func (j Joiner) UpdateJoiner() (int64, error) {
 	fmt.Printf("Connected!\n")
 	defer conn.Close()
 
-	sql := fmt.Sprintf("UPDATE Joiner SET Stack = '%s', Role = '%s', Languages = '%s' WHERE Id= %d", j.Stack, j.Role, j.Languages, j.Id)
+	sql := fmt.Sprintf("UPDATE Joiner SET Stack = '%s', Role = '%s', Languages = '%s' WHERE Id= %d", j.Stack, j.Role, j.Languages, id)
 
 	result, err := conn.Exec(sql)
 
@@ -76,4 +77,44 @@ func (j Joiner) UpdateJoiner() (int64, error) {
 		return -1, err
 	}
 	return result.LastInsertId()
+}
+
+// GetJoiner
+func Get(input int) (Joiner, error) {
+
+	config := configReader()
+
+	// Connect to database
+	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s;",
+		config.Database.Server, config.Database.Username, config.Database.Password, config.Database.Port, config.Database.DBName)
+
+	conn, err := sql.Open("mssql", connString)
+
+	if err != nil {
+		log.Fatal("Open connection failed:", err.Error())
+	}
+
+	var joiner Joiner
+
+	var name, stack, role, languages string
+	var id, joinerMessageAcknowledgementId int
+
+	// Query for a value based on a single row.
+	if err := conn.QueryRow("SELECT * from Joiner where id = ?", input).Scan(&id, &name, &stack, &role, &languages, &joinerMessageAcknowledgementId); err != nil {
+		if err == sql.ErrNoRows {
+			return joiner, err
+		}
+		return joiner, err
+	}
+
+	joiner = Joiner{
+		Id:                             id,
+		Name:                           name,
+		Stack:                          stack,
+		Role:                           role,
+		Languages:                      languages,
+		JoinerMessageAcknowledgementId: joinerMessageAcknowledgementId,
+	}
+
+	return joiner, nil
 }
