@@ -18,18 +18,18 @@ async function getTasks () {
         console.log("DB Error2: " + err); 
     })
 
-    var query = "SELECT t2.Id AS ParentId, " +
-                "t2.[Name] AS Parent, " +
-                "t2.[Description] AS ParentDescription, " +
-                "t2.EstimatedRequiredHours AS ParentEstimatedRequiredHours, " +
-                "t2.Stack AS ParentStack, " +
-                "t2.MinRole AS ParentMinRole, " +
-                "t1.Id AS ChildId, " +
-                "t1.[Name] AS Child, " +
-                "t1.[Description] AS ChildDescription, " +
-                "t1.EstimatedRequiredHours AS ChildEstimatedRequiredHours, " +
-                "t1.Stack AS ChildStack, " +
-                "t1.MinRole AS ChildMinRole " +
+    var query = "SELECT t1.Id AS ParentId, " +
+                "t1.[Name] AS Parent, " +
+                "t1.[Description] AS ParentDescription, " +
+                "t1.EstimatedRequiredHours AS ParentEstimatedRequiredHours, " +
+                "t1.Stack AS ParentStack, " +
+                "t1.MinRole AS ParentMinRole, " +
+                "t2.Id AS ChildId, " +
+                "t2.[Name] AS Child, " +
+                "t2.[Description] AS ChildDescription, " +
+                "t2.EstimatedRequiredHours AS ChildEstimatedRequiredHours, " +
+                "t2.Stack AS ChildStack, " +
+                "t2.MinRole AS ChildMinRole " +
                 "FROM Task t1 " +
                 "INNER JOIN Task t2 ON t1.Id = t2.TaskId ;"
 

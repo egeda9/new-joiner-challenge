@@ -8,22 +8,31 @@ module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
 
     if (req.method == 'POST') {
-        //console.log(req.body)
-        let lastInsertedRecord = null
 
-        if (req.body.Task) {            
-            lastInsertedRecord = await db.create(req.body.Task)
+        if (req.body) {            
+            //console.log(req.body)
+            let lastInsertedRecord = null
+
+            if (req.body) {            
+                lastInsertedRecord = await db.create(req.body)
+            }
+            
+            if (req.body.Task && lastInsertedRecord && lastInsertedRecord.length > 0) {
+                req.body.Task.TaskId = lastInsertedRecord[0].id            
+                lastInsertedRecord = await db.create(req.body.Task)
+            }            
+
+            context.res = {
+                headers: { 'Content-Type': 'application/json' },
+                statusCode: 201
+            }
         }
-        
-        if (lastInsertedRecord && lastInsertedRecord.length > 0) {
-            req.body.TaskId = lastInsertedRecord[0].id            
-        }
-
-        lastInsertedRecord = await db.create(req.body)
-
-        context.res = {
-            headers: { 'Content-Type': 'application/json' },
-            statusCode: 201
+        else {
+            context.res = {
+                headers: { 'Content-Type': 'application/json' },
+                body: '{ "message": "Empty request body" }',
+                statusCode: 400
+            }
         }
     }
 
