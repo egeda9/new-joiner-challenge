@@ -28,7 +28,26 @@ This project aims to create, register and manage some of the tasks that a new co
 
 ### Technology Stack
 
+- [Python](https://www.python.org)
+  - [Spacy](https://spacy.io)
+- [Golang](https://golang.org)
+- [NodeJS](https://nodejs.org/en/)
+- [Microsoft SQL](https://www.microsoft.com/en-us/sql-server/)
+- [RabbitMQ](https://www.rabbitmq.com)
+- [Microsoft Azure](https://azure.microsoft.com/en-us/)
+  - [Azure Functions](https://azure.microsoft.com/en-us/services/functions/)
+  - [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-messaging-overview)
+  - [Azure SQL](https://azure.microsoft.com/en-us/products/azure-sql/database/)
+  - [Azure Data Factory](https://docs.microsoft.com/en-us/azure/data-factory/).
+
 ### Components Description
+
+- Azure Function 1: File Upload and NLP Microservice
+  - Stack: Python
+- Azure Function 2: Joiner Microservice
+  - Stack: Golang
+- Azure Function 3: Task Microservice
+  - Stack: NodeJS
 
 ### Solution Flow
 
@@ -66,14 +85,7 @@ This project aims to create, register and manage some of the tasks that a new co
 | EstimatedRequiredHours | varchar | 2 |
 | Stack | varchar | .Net |
 | MinRole | varchar | Developer |
-| Task | int | 2 |
-
-**Joiner Task**: `JoinerTask`
-
-| Column Name | Type | Sample |  
-|-----------|:-----------:|:-----------|  
-| Id | uniqueidentifier | 6BECB7B8-D876-4CFF-A25E-3E66F83DE873 |
-| Task | varchar |  |
-| Joiner | varchar |  |  
+| TaskId | int | 2 |
+| UserId | int | 1 |
 
 ## Reporting Service Description

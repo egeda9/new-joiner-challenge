@@ -24,8 +24,9 @@ async function update (id, task) {
                 "EstimatedRequiredHours = @EstimatedRequiredHours, " +
                 "Stack = @Stack, " +
                 "MinRole = @MinRole, " +
-                "TaskId = @TaskId " +
-                "WHERE Id = @Id ;"
+                "TaskId = @TaskId, " +
+                "UserId = @UserId " +
+                "WHERE Id = @Id;"
 
     try {
     const pool = await sql.connect(config);
@@ -37,6 +38,7 @@ async function update (id, task) {
       .input('Stack', sql.VarChar, task.Stack)
       .input('MinRole', sql.VarChar, task.MinRole)
       .input('TaskId', sql.Int, task.TaskId)
+      .input('UserId', sql.VarChar, task.UserId)
       .query(query);
     console.log("updateTask:then(result=>");
     sql.close();

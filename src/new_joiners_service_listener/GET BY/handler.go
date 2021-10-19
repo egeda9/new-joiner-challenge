@@ -2,8 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	dataaccess "handler/joiner-getby/func/dataaccess"
@@ -44,11 +46,25 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonResp)
 }
 
-func main() {
+// We could fix the port number, but cloud environments normally require
+// some flexibility on defining the server port. This is how it would work
+// in Azure.
+func getHTTPPort() int {
+	httpPort := 8080
+	if val, ok := os.LookupEnv("FUNCTIONS_CUSTOMHANDLER_PORT"); ok {
+		httpPort, err := strconv.Atoi(val)
+		if err == nil {
+			return httpPort
+		}
+	}
+	return httpPort
+}
 
+func main() {
+	httpPort := getHTTPPort()
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/Joiner", requestHandler)
 
-	err := http.ListenAndServe(":5008", mux)
+	err := http.ListenAndServe(fmt.Sprintf(":%d", httpPort), mux)
 	log.Fatal(err)
 }

@@ -1,9 +1,10 @@
 require('dotenv').config();
 
 const db = require('../dboperations');
+const joinerservice = require('../joinerservice');
 
 module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
+    context.log('JavaScript HTTP trigger function processed a request.');   
 
     var paramId = req.params.id    
 
@@ -16,36 +17,54 @@ module.exports = async function (context, req) {
     
                 if (currentTask.length > 0) {
                     if (req.body) {
-                        if (req.body.TaskId && currentTask[0].TaskId != req.body.TaskId) {
-                            hasParent = await db.getParent(req.body.TaskId)
-    
-                            if (hasParent.length == 0) {                         
+                        
+                        var joiner = ''
+
+                        if (req.body.UserId) {
+                            
+                            joiner = await joinerservice.get(req.body.UserId);
+
+                            if (!joiner) {
+                                context.res = {
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: '{ "message": "Invalid user assignment" }',
+                                    statusCode: 400
+                                }
+                            }
+                        }
+
+                        if (!req.body.UserId || joiner) {
+                            if (req.body.TaskId && currentTask[0].TaskId != req.body.TaskId) {
+                                hasParent = await db.getParent(req.body.TaskId)
+        
+                                if (hasParent.length == 0) {                         
+                                    await db.update(paramId, req.body)
+        
+                                    context.res = {   
+                                        headers: { 'Content-Type': 'application/json' },     
+                                        body: '{ "message": "Successfully updated" }',
+                                        statusCode: 200
+                                    };
+                                }
+        
+                                else {
+                                    context.res = {
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: '{ "message": "Can not update parent task. Parent task has a child" }',
+                                        statusCode: 400
+                                    };
+                                }
+                            }
+                            else {
                                 await db.update(paramId, req.body)
-    
+        
                                 context.res = {   
                                     headers: { 'Content-Type': 'application/json' },     
                                     body: '{ "message": "Successfully updated" }',
                                     statusCode: 200
                                 };
-                            }
-    
-                            else {
-                                context.res = {
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: '{ "message": "Can not update parent task. Parent task has a child" }',
-                                    statusCode: 400
-                                };
-                            }
-                        }
-                        else {
-                            await db.update(paramId, req.body)
-    
-                            context.res = {   
-                                headers: { 'Content-Type': 'application/json' },     
-                                body: '{ "message": "Successfully updated" }',
-                                statusCode: 200
-                            };
-                        }
+                            }   
+                        }               
                     }
                     else {
                         context.res = {
