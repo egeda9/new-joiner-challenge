@@ -45,7 +45,7 @@ module.exports = async function (context, req) {
         else {
             context.res = {
                 headers: { 'Content-Type': 'application/json' },
-                body: '{ "message": No results" }',
+                body: '{ "message": "No results" }',
                 statusCode: 204
             }
         }                    
