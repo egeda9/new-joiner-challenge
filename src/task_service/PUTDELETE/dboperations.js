@@ -74,6 +74,32 @@ async function get (id) {
   }
 }
 
+async function deleteTask (id) {
+  console.log("---------deleteTask");
+
+  sql.on('error', err => {
+      console.log("DB Error2: " + err); 
+  })
+
+  var query = "DELETE " +
+              "FROM Task " +
+              "WHERE Id = @Id;"
+
+  try {
+    const pool = await sql.connect(config);
+    const result_1 = await pool.request()
+      .input('Id', sql.Int, id)
+      .query(query);
+    console.log("deleteTask:then(result=>");
+    sql.close();
+    return result_1.recordset;
+  } catch (err_1) {
+    console.log("DB Error1: " + err_1);
+    sql.close();
+    throw err_1;
+  }
+}
+
 async function getParent (taskId) {
   console.log("---------getTask");
 
@@ -103,5 +129,6 @@ async function getParent (taskId) {
 module.exports = {
   update:  update,
   get: get,
-  getParent: getParent
+  getParent: getParent,
+  deleteTask: deleteTask
 }

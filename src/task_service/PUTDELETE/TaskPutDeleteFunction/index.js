@@ -7,10 +7,11 @@ module.exports = async function (context, req) {
 
     var paramId = req.params.id    
 
-    if (req.method == 'PUT') {
+    if (paramId > 0) {
 
-        try {
-            if (paramId > 0) {
+        if (req.method == 'PUT') {
+
+            try {            
                 var currentTask = await db.get(paramId)
     
                 if (currentTask.length > 0) {
@@ -61,15 +62,45 @@ module.exports = async function (context, req) {
                         statusCode: 204
                     }
                 }
-            }  
-        } catch (error) {
-            console.error(error);
-            
+            } catch (error) {
+                console.error(error);
+                
+                context.res = {
+                    headers: { 'Content-Type': 'application/json' },
+                    body: '{ "message": "' + error + '" }',
+                    statusCode: 500
+                }
+            }              
+        }
+        
+        else if (req.method == 'DELETE') {
+            try {                
+                await db.deleteTask(paramId)
+            } catch (error) {
+                console.error(error);
+
+                context.res = {
+                    headers: { 'Content-Type': 'application/json' },
+                    body: '{ "message": "' + error + '" }',
+                    statusCode: 500
+                }
+            }
+        }
+    
+        else {
             context.res = {
                 headers: { 'Content-Type': 'application/json' },
-                body: '{ "message": "' + error + '" }',
-                statusCode: 500
+                body: '{ "message": "Not supported operation" }',
+                statusCode: 404
             }
-        }              
-    }    
+        }
+    }
+    
+    else {
+        context.res = {
+            headers: { 'Content-Type': 'application/json' },
+            body: '{ "message": "Invalid route parameter" }',
+            statusCode: 404
+        }
+    }
 }
