@@ -15,6 +15,13 @@
       "type": "http",
       "direction": "out",
       "name": "$return"
+    },
+    {
+      "type": "serviceBus",
+      "direction": "out",
+      "connection": "njcsbsjoiner_SERVICEBUS",
+      "name": "msg",
+      "queueName": "joinerqueue"
     }
   ]
 }

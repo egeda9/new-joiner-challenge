@@ -2,13 +2,14 @@ import logging
 import azure.functions as func
 from itertools import *
 import spacy
-nlp = spacy.load("en_core_web_trf")
+import en_core_web_sm
+nlp = en_core_web_sm.load()
 import PyPDF2
-import pika
+# import pika
 import docx2txt
 import json
 from json import JSONEncoder
-import yaml
+# import yaml
 
 ALLOWED_EXTENSIONS = {'pdf', 'docx'}
 
@@ -21,12 +22,12 @@ class NerEncoder(JSONEncoder):
         def default(self, o):
             return o.__dict__
         
-def get_config():
+# def get_config():
     
-    with open("config.yml", "r") as config:
-        content = yaml.load(config)
+#     with open("config.yml", "r") as config:
+#         content = yaml.load(config)
         
-    return content
+#     return content
 
 def get_ner(text):
 
@@ -55,19 +56,19 @@ def read_pdf(file):
             
     return text.strip()
 
-def send_message(message):
+# def send_message(message):
     
-    config = get_config()
-    connection = pika.BlockingConnection(pika.ConnectionParameters(config["server"]["broker"]))
-    channel = connection.channel()
+#     config = get_config()
+#     connection = pika.BlockingConnection(pika.ConnectionParameters(config["server"]["broker"]))
+#     channel = connection.channel()
 
-    channel.queue_declare(queue='joiner')
+#     channel.queue_declare(queue='joiner')
 
-    channel.basic_publish(exchange='',
-                          routing_key='joiner',
-                          body=message)
+#     channel.basic_publish(exchange='',
+#                           routing_key='joiner',
+#                           body=message)
 
-    connection.close()
+#     connection.close()
 
 def read_docx(file):
     text = docx2txt.process(file)          
@@ -77,7 +78,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def main(req: func.HttpRequest) -> func.HttpResponse:
+def main(req: func.HttpRequest, msg: func.Out[str]) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
  
     try:
@@ -117,7 +118,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                         result[key] = l
 
                     jsonMessage = json.dumps(result)
-                    send_message(jsonMessage)                                
+                    msg.set(jsonMessage)
                              
                 return func.HttpResponse("OK", status_code=200)
 

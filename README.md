@@ -46,8 +46,7 @@ This project aims to create, register and manage some of the tasks that a new co
 
 ### Components Description
 
-- Azure Function 1: File Upload and NLP Microservice
-  - Stack: Python
+- Azure Function 1: File Upload and NLP Microservice  
 
 **Endpoint**: Action POST
 
@@ -67,6 +66,103 @@ This project aims to create, register and manage some of the tasks that a new co
 ```bash
 OK
 ```
+
+- Stack: Python + Spacy: Resulting message based on Natural Language Processing results
+
+```json
+{
+  "DATE": [
+    "June 2016 – September 2017",
+    "October 2014 – June 2016",
+    "October 2013 – October 2014",
+    "June 2011 –",
+    "October 2013",
+    "May 2010 – June 2011"
+  ],
+  "GPE": [
+    "US",
+    "the United States",
+    "UK"
+  ],
+  "LANGUAGE": [
+    "Spanish",
+    "English"
+  ],
+  "LOC": [
+    "Latin America"
+  ],
+  "NORP": [
+    "Brazilian"
+  ],
+  "Noun_Phrase": [
+    "Professional Resume",
+    "Name",
+    "Name 1",
+    "Role",
+    "Developer",
+    "Systems Engineer",
+    "master",
+    "Scrum Master",
+    "software engineering",
+    "experience",
+    "software development",
+    "enterprise and cloud-based applications",
+    "Microsoft Azure",
+    "Amazon Web Services",
+    "Net Framework",
+    "Net Core"    
+  ],
+  "ORG": [
+    "Microsoft",
+    "Amazon",
+    "Azure",
+    "AWS",
+    "Endava"
+  ],
+  "PERSON": [
+    "Name 1"
+  ],
+  "PRODUCT": [
+    "Azure Virtual Machines"
+  ],
+  "Verb": [
+    "specialize",
+    "focus",
+    "base",
+    "support",
+    "relate",
+    "follow",
+    "drive",
+    "have",
+    "execute",
+    "acquire",
+    "develop",
+    "learn",
+    "work",
+    "adapt",
+    "like",
+    "bring",
+    "promote",
+    "certify",
+    "improve",
+    "provide",
+    "use",
+    "store",
+    "serve",
+    "communicate",
+    "monitor",
+    "generate",
+    "deploy",
+    "schedule",
+    "extract",
+    "identify"
+  ]
+}
+```
+
+- Message Queue result
+
+![Message Queue result](./doc/img/new_joiners_challenge_message_queue.png)
 
 - Azure Function 2: Joiner Microservice
   - Stack: Golang
