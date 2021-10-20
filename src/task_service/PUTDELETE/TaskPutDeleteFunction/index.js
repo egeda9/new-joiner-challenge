@@ -95,6 +95,13 @@ module.exports = async function (context, req) {
         else if (req.method == 'DELETE') {
             try {                
                 await db.deleteTask(paramId)
+
+                context.res = {
+                    headers: { 'Content-Type': 'application/json' },
+                    body: '{ "message": "Successfully deleted" }',
+                    statusCode: 500
+                }
+
             } catch (error) {
                 console.error(error);
 
