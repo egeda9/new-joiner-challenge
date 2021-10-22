@@ -7,18 +7,7 @@ import (
 	"os"
 
 	_ "github.com/denisenkom/go-mssqldb"
-	yaml "gopkg.in/yaml.v2"
 )
-
-type Config struct {
-	Database struct {
-		Username string `yaml:"user"`
-		Password string `yaml:"pass"`
-		DBName   string `yaml:"dbname"`
-		Port     int    `yaml:"port"`
-		Server   string `yaml:"server"`
-	} `yaml:"database"`
-}
 
 type Joiner struct {
 	Id        int
@@ -28,37 +17,16 @@ type Joiner struct {
 	Languages string
 }
 
-func configReader() Config {
-
-	path, _ := os.Getwd()
-	f, err := os.Open(path + "\\config.yml")
-
-	if err != nil {
-		log.Panic(err)
-	}
-	defer f.Close()
-
-	var cfg Config
-	decoder := yaml.NewDecoder(f)
-	err = decoder.Decode(&cfg)
-
-	if err != nil {
-		log.Panic(err)
-	}
-
-	return cfg
-}
-
 // UpdateJoiner update a record status
 func Get() ([]Joiner, error) {
 
-	config := configReader()
+	connStr := os.Getenv("DATABASE_CONNECTION_STRING")
+	if connStr == "" {
+		fmt.Println("FATAL: expected environment variable DATABASE_CONNECTION_STRING not set")
+		return nil, fmt.Errorf("FATAL: expected environment variable DATABASE_CONNECTION_STRING not set")
+	}
 
-	// Connect to database
-	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s;",
-		config.Database.Server, config.Database.Username, config.Database.Password, config.Database.Port, config.Database.DBName)
-
-	conn, err := sql.Open("mssql", connString)
+	conn, err := sql.Open("mssql", connStr)
 
 	if err != nil {
 		log.Fatal("Open connection failed:", err.Error())

@@ -9,9 +9,19 @@ import (
 	"strconv"
 
 	dataaccess "handler/joiner-get/func/dataaccess"
+
+	"github.com/joho/godotenv"
 )
 
 func requestHandler(w http.ResponseWriter, r *http.Request) {
+
+	// load .env file from given path
+	// we keep it empty it will load .env from current directory
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file -tags debug")
+	}
 
 	joiners, err := dataaccess.Get()
 
