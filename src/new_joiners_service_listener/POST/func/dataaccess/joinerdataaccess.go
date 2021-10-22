@@ -8,18 +8,7 @@ import (
 	"time"
 
 	_ "github.com/denisenkom/go-mssqldb"
-	yaml "gopkg.in/yaml.v2"
 )
-
-type Config struct {
-	Database struct {
-		Username string `yaml:"user"`
-		Password string `yaml:"pass"`
-		DBName   string `yaml:"dbname"`
-		Port     int    `yaml:"port"`
-		Server   string `yaml:"server"`
-	} `yaml:"database"`
-}
 
 type Joiner struct {
 	Name                           string
@@ -29,37 +18,16 @@ type Joiner struct {
 	JoinerMessageAcknowledgementId int
 }
 
-func configReader() Config {
-
-	path, _ := os.Getwd()
-	f, err := os.Open(path + "\\config.yml")
-
-	if err != nil {
-		log.Panic(err)
-	}
-	defer f.Close()
-
-	var cfg Config
-	decoder := yaml.NewDecoder(f)
-	err = decoder.Decode(&cfg)
-
-	if err != nil {
-		log.Panic(err)
-	}
-
-	return cfg
-}
-
 // CreateJoiner create a joiner
 func (j Joiner) CreateJoiner() (int, error) {
 
-	config := configReader()
+	connStr := os.Getenv("DATABASE_CONNECTION_STRING")
+	if connStr == "" {
+		fmt.Println("FATAL: expected environment variable DATABASE_CONNECTION_STRING not set")
+		return 0, fmt.Errorf("FATAL: expected environment variable DATABASE_CONNECTION_STRING not set")
+	}
 
-	// Connect to database
-	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s;",
-		config.Database.Server, config.Database.Username, config.Database.Password, config.Database.Port, config.Database.DBName)
-
-	conn, err := sql.Open("mssql", connString)
+	conn, err := sql.Open("mssql", connStr)
 
 	if err != nil {
 		log.Fatal("Open connection failed:", err.Error())
@@ -85,13 +53,13 @@ func (j Joiner) CreateJoiner() (int, error) {
 // ReadJoiner read a joiner
 func (j Joiner) GetJoiner(name string) (int, error) {
 
-	config := configReader()
+	connStr := os.Getenv("DATABASE_CONNECTION_STRING")
+	if connStr == "" {
+		fmt.Println("FATAL: expected environment variable DATABASE_CONNECTION_STRING not set")
+		return 0, fmt.Errorf("FATAL: expected environment variable DATABASE_CONNECTION_STRING not set")
+	}
 
-	// Connect to database
-	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s;",
-		config.Database.Server, config.Database.Username, config.Database.Password, config.Database.Port, config.Database.DBName)
-
-	conn, err := sql.Open("mssql", connString)
+	conn, err := sql.Open("mssql", connStr)
 
 	if err != nil {
 		log.Fatal("Open connection failed:", err.Error())
@@ -127,13 +95,13 @@ func (j Joiner) GetJoiner(name string) (int, error) {
 // CreateJoiner create a joiner
 func (j Joiner) CreateJoinerMessageAcknowledgement(message string) (int, error) {
 
-	config := configReader()
+	connStr := os.Getenv("DATABASE_CONNECTION_STRING")
+	if connStr == "" {
+		fmt.Println("FATAL: expected environment variable DATABASE_CONNECTION_STRING not set")
+		return 0, fmt.Errorf("FATAL: expected environment variable DATABASE_CONNECTION_STRING not set")
+	}
 
-	// Connect to database
-	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s;",
-		config.Database.Server, config.Database.Username, config.Database.Password, config.Database.Port, config.Database.DBName)
-
-	conn, err := sql.Open("mssql", connString)
+	conn, err := sql.Open("mssql", connStr)
 
 	if err != nil {
 		log.Fatal("Open connection failed:", err.Error())
@@ -159,13 +127,13 @@ func (j Joiner) CreateJoinerMessageAcknowledgement(message string) (int, error) 
 // UpdateJoinerMessageAcknowledgementStatus update a record status
 func (j Joiner) UpdateJoinerMessageAcknowledgementStatus() (int64, error) {
 
-	config := configReader()
+	connStr := os.Getenv("DATABASE_CONNECTION_STRING")
+	if connStr == "" {
+		fmt.Println("FATAL: expected environment variable DATABASE_CONNECTION_STRING not set")
+		return 0, fmt.Errorf("FATAL: expected environment variable DATABASE_CONNECTION_STRING not set")
+	}
 
-	// Connect to database
-	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s;",
-		config.Database.Server, config.Database.Username, config.Database.Password, config.Database.Port, config.Database.DBName)
-
-	conn, err := sql.Open("mssql", connString)
+	conn, err := sql.Open("mssql", connStr)
 
 	if err != nil {
 		log.Fatal("Open connection failed:", err.Error())

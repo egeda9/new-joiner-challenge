@@ -1,19 +1,11 @@
 {
   "bindings": [
     {
-      "authLevel": "anonymous",
-      "type": "httpTrigger",
+      "name": "newJoinerSubscriberServiceBusTrigger",
+      "type": "serviceBusTrigger",
       "direction": "in",
-      "name": "req",
-      "methods": [
-        "post"
-      ],
-      "route": "Joiner"
-    },
-    {
-      "type": "http",
-      "direction": "out",
-      "name": "res"
+      "queueName": "joinerqueue",
+      "connection": "SERVICEBUS_CONNECTION_STRING"
     }
   ]
 }
