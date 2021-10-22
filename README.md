@@ -7,6 +7,8 @@
   - [Architecture Design](#architecture-design)
     - [Technology Stack](#technology-stack)
     - [Components Description](#components-description)
+      - [Resource Groups](#resource-groups)
+      - [Azure Functions](#azure-functions)
     - [Solution Flow](#solution-flow)
       - [Upload Joiner Profile](#upload-joiner-profile)
       - [Create New Joiner](#create-new-joiner)
@@ -25,6 +27,7 @@ This project aims to create, register and manage some of the tasks that a new co
 - Use an Event-Driven Architecture approach.
 - Build an approach based on four services with a specific responsibility.
 - Each service should be created with a different programming language.
+- Software components are deployed over an Microsoft Azure subscription
 
 ## Architecture Design
 
@@ -36,17 +39,43 @@ This project aims to create, register and manage some of the tasks that a new co
   - [Spacy](https://spacy.io)
 - [Golang](https://golang.org)
 - [NodeJS](https://nodejs.org/en/)
-- [Microsoft SQL](https://www.microsoft.com/en-us/sql-server/)
-- [RabbitMQ](https://www.rabbitmq.com)
 - [Microsoft Azure](https://azure.microsoft.com/en-us/)
   - [Azure Functions](https://azure.microsoft.com/en-us/services/functions/)
   - [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-messaging-overview)
-  - [Azure SQL](https://azure.microsoft.com/en-us/products/azure-sql/database/)
+  - [Azure SQL Server](https://azure.microsoft.com/en-us/products/azure-sql/database/)
   - [Azure Data Factory](https://docs.microsoft.com/en-us/azure/data-factory/).
 
 ### Components Description
 
-- Azure Function 1: File Upload and NLP Microservice  
+#### Resource Groups
+
+Refers to: [Resource Groups](./doc/az-resource-groups.md)
+
+#### Azure Functions
+
+- Azure Function 1: File Upload and NLP Microservice. [Link](./doc/az-function-python-deployment.md)
+
+```
+project
+│   .funcignore
+│   .gitignore
+│   host.json
+|   local.settings.json
+|   proxies.json
+|   requirements.txt
+|
+└───NewJoinerReceiverFunction
+│   │   __init__.py
+│   │   function.json
+|   |   sample.dat 
+│   │   
+│   
+└───.vscode
+    │   extensions.json
+    │   launch.json
+    |   settings.json
+    |   tasks.json
+```
 
 **Endpoint**: Action POST
 
@@ -164,14 +193,44 @@ OK
 
 ![Message Queue result](./doc/img/new_joiners_challenge_message_queue.png)
 
-- Azure Function 2: Joiner Microservice
+- Azure Function 2: Joiner Microservice. [Link](./doc/az-function-golang-deployment.md)
   - Stack: Golang
+
+**Operation**: GET Joiners
+
+```
+project
+│   .env
+│   .funcignore
+│   .gitignore
+|   go.mod
+|   go.sum
+|   handler.go
+|   host.json
+|   local.settings.json
+|   proxies.json
+|
+└───NewJoinerFunction
+│   │   function.json
+│   │   
+│   
+└───func
+│   └───dataaccess
+│       │   joinerdataaccess.go
+│       │   
+│ 
+└───.vscode
+    │   extensions.json
+    |   settings.json
+    |   tasks.json
+```
 
 **Endpoint**: Action GET
 
 ```bash
 {baseUrl}/api/Joiner
 ```
+
 **Response body (Sample)**:
 **Status Code**: OK
 
@@ -208,6 +267,35 @@ OK
 ]
 ```
 
+**Operation**: GET Joiner
+
+```
+project
+│   .env
+│   .funcignore
+│   .gitignore
+|   go.mod
+|   go.sum
+|   handler.go
+|   host.json
+|   local.settings.json
+|   proxies.json
+|
+└───NewJoinerByFunction
+│   │   function.json
+│   │   
+│   
+└───func
+│   └───dataaccess
+│       │   joinerdataaccess.go
+│       │   
+│ 
+└───.vscode
+    │   extensions.json
+    |   settings.json
+    |   tasks.json
+```
+
 **Endpoint**: Action GET
 
 ```bash
@@ -225,6 +313,35 @@ OK
         "Role": "Developer",
         "Languages": "[\"Romanian\",\"Russian\",\"English\",\"French\"]"
 }
+```
+
+**Operation**: PUT Joiner
+
+```
+project
+│   .env
+│   .funcignore
+│   .gitignore
+|   go.mod
+|   go.sum
+|   handler.go
+|   host.json
+|   local.settings.json
+|   proxies.json
+|
+└───NewJoinerUpdateFunction
+│   │   function.json
+│   │   
+│   
+└───func
+│   └───dataaccess
+│       │   joinerdataaccess.go
+│       │   
+│ 
+└───.vscode
+    │   extensions.json
+    |   settings.json
+    |   tasks.json
 ```
 
 **Endpoint**: Action PUT
@@ -257,8 +374,37 @@ OK
 }
 ```
 
-- Azure Function 3: Task Microservice
+- Azure Function 3: Task Microservice. [Link](./doc/az-function-nodejs-deployment.md)
   - Stack: NodeJS
+
+**Operation**: GET/POST Tasks
+
+```
+project
+│   node_modules
+│   .env
+│   .funcignore
+|   .gitignore
+|   child.js
+|   dboperations.js
+|   host.json
+|   local.settings.json
+|   package-lock.json
+|   package.json
+|   task.js
+|
+└───NewJoinerTaskFunction
+│   │   function.json
+|   |   index.js
+|   |   sample.dat
+│   │   
+│ 
+└───.vscode
+    │   extensions.json
+    |   settings.json
+    |   tasks.json
+    |   launch.json
+```
 
 **Endpoint**: Action GET
 
@@ -314,6 +460,62 @@ OK
 ]
 ```
 
+**Endpoint**: Action POST
+
+```bash
+{baseUrl}/api/Task
+```
+
+**Request body (Example)**:
+
+```json
+{        
+        "Name": "Run Tests",
+        "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+        "EstimatedRequiredHours": 1,
+        "Stack": "--",
+        "MinRole": "BA",
+        "Task": {            
+            "Name": "Create Code Component",
+            "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+            "EstimatedRequiredHours": 2,
+            "Stack": ".Net",
+            "MinRole": "Developer"
+        }
+    }
+```
+
+**Response Status Code**: Created
+
+**Operation**: GET Task
+
+```
+project
+│   node_modules
+│   .env
+│   .funcignore
+|   .gitignore
+|   child.js
+|   dboperations.js
+|   host.json
+|   local.settings.json
+|   package-lock.json
+|   package.json
+|   task.js
+|
+└───NewJoinerTaskGetByFunction
+│   │   function.json
+|   |   index.js
+|   |   sample.dat
+│   │   
+│ 
+└───.vscode
+    │   extensions.json
+    |   settings.json
+    |   tasks.json
+    |   launch.json
+```
+
 **Endpoint**: Action GET
 
 ```bash
@@ -341,32 +543,33 @@ OK
 }
 ```
 
-**Endpoint**: Action POST
+**Operation**: PUT/DELETE Task
 
-```bash
-{baseUrl}/api/Task
 ```
-
-**Request body (Example)**:
-
-```json
-{        
-        "Name": "Run Tests",
-        "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-        "EstimatedRequiredHours": 1,
-        "Stack": "--",
-        "MinRole": "BA",
-        "Task": {            
-            "Name": "Create Code Component",
-            "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-            "EstimatedRequiredHours": 2,
-            "Stack": ".Net",
-            "MinRole": "Developer"
-        }
-    }
+project
+│   node_modules
+│   .env
+│   .funcignore
+|   .gitignore
+|   dboperations.js
+|   host.json
+|   local.settings.json
+|   package-lock.json
+|   package.json
+|   joinerservice.js
+|
+└───NewJoinerTaskPutDeleteFunction
+│   │   function.json
+|   |   index.js
+|   |   sample.dat
+│   │   
+│ 
+└───.vscode
+    │   extensions.json
+    |   settings.json
+    |   tasks.json
+    |   launch.json
 ```
-
-**Response Status Code**: Created
 
 **Endpoint**: Action PUT
 
