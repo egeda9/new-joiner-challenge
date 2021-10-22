@@ -3,9 +3,9 @@
   "Values": {
     "AzureWebJobsStorage": "",
     "FUNCTIONS_WORKER_RUNTIME": "custom",
-    "SERVICEBUS_CONNECTION_STRING": "Endpoint=sb://njc-sbs-joiner.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=qOTYNr+s3APE4+0BDZf0UpJwhiRfPIasjAjm+rqCFO0=",
-    "APPINSIGHTS_INSTRUMENTATIONKEY": "03aacf8f-dc22-4545-ad49-acdc9b4fd7c3",
-    "DATABASE_CONNECTION_STRING": "server=njc-joiner.database.windows.net;user id=njcsa;password=Colombia2021.1.;port=1433;database=Joiner;"
+    "SERVICEBUS_CONNECTION_STRING": "",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "",
+    "DATABASE_CONNECTION_STRING": ""
   },
   "Host": {
     "LocalHttpPort": 5007
