@@ -619,7 +619,7 @@ Refers to: [Postman Collection](./doc/new_joiners.postman_collection.json)
 
 **Operation**: Message broker.
 
-Refers to: [Postman Collection](./doc/az-service_bus_namespace.md)
+Refers to: [Service Bus Queue](./doc/az-service_bus_namespace.md)
 
 ### Solution Flow
 
