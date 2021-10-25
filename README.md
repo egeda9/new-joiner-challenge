@@ -96,7 +96,7 @@ project
 OK
 ```
 
-- Stack: Python + Spacy: Resulting message based on Natural Language Processing results
+- Stack: [Python + Spacy](./doc/az-function-python-deployment.md): Resulting message based on Natural Language Processing results
 
 ```json
 {
@@ -591,7 +591,7 @@ project
 }
 ```
 
-*Optional: TaskId and UserId
+> Optional: TaskId and UserId
 
 **Response Status Code**: OK
 
@@ -614,6 +614,12 @@ project
     "message": "Successfully deleted"
 }
 ```
+
+Refers to: [Postman Collection](./doc/new_joiners.postman_collection.json)
+
+**Operation**: Message broker.
+
+Refers to: [Postman Collection](./doc/az-service_bus_namespace.md)
 
 ### Solution Flow
 
@@ -671,3 +677,5 @@ project
 | UserId | int | 1 |
 
 ## Reporting Service Description
+
+Refers to: [Reporting](./doc/az-function_reporting.md)

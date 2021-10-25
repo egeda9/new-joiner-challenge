@@ -10,7 +10,7 @@ The function application to manage the Task abstraction. The programming languag
 
 #### HTTP Trigger
 
-Mainly they are functions to support de CRUD operations over the Task abstraction.
+Mainly they are functions to support the CRUD operations over the Task abstraction.
 
 - NewJoinerTaskFunction (GET/POST)
 - NewJoinerTaskGetByFunction (GET)

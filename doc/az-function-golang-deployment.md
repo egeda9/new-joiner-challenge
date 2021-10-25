@@ -10,7 +10,7 @@ The function application to manage the Joiner abstraction. The programming langu
 
 #### HTTP Trigger
 
-Mainly they are functions to support de CRUD operations over the Joiner abstraction.
+Mainly they are functions to support the CRUD operations over the Joiner abstraction.
 
 - NewJoinerByFunction (GET)
 - NewJoinerFunction (GET)
