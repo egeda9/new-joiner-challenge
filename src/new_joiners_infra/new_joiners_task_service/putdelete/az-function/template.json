@@ -1,0 +1,199 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_NewJoinerTaskPutDeleteFunction_name": {
+            "defaultValue": "NewJoinerTaskPutDeleteFunction",
+            "type": "String"
+        },
+        "serverfarms_ASP_NjcTask_8e18_externalid": {
+            "defaultValue": "/subscriptions/3431dab2-2055-4c5f-8595-a59716ca3c4b/resourceGroups/Njc.Task/providers/Microsoft.Web/serverfarms/ASP-NjcTask-8e18",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2021-01-15",
+            "name": "[parameters('sites_NewJoinerTaskPutDeleteFunction_name')]",
+            "location": "East US",
+            "kind": "functionapp",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "newjoinertaskputdeletefunction.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "newjoinertaskputdeletefunction.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[parameters('serverfarms_ASP_NjcTask_8e18_externalid')]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "customDomainVerificationId": "CD9F96C2D4CC5BEF4C1793BE292BA4AD4BC0678543CADFA17D9F024D8A44B449",
+                "containerSize": 1536,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": false,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2021-01-15",
+            "name": "[concat(parameters('sites_NewJoinerTaskPutDeleteFunction_name'), '/ftp')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_NewJoinerTaskPutDeleteFunction_name'))]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2021-01-15",
+            "name": "[concat(parameters('sites_NewJoinerTaskPutDeleteFunction_name'), '/scm')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_NewJoinerTaskPutDeleteFunction_name'))]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2021-01-15",
+            "name": "[concat(parameters('sites_NewJoinerTaskPutDeleteFunction_name'), '/web')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_NewJoinerTaskPutDeleteFunction_name'))]"
+            ],
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "phpVersion": "5.6",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$NewJoinerTaskPutDeleteFunction",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.0",
+                "ftpsState": "AllAllowed",
+                "preWarmedInstanceCount": 0,
+                "functionAppScaleLimit": 200,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/functions",
+            "apiVersion": "2021-01-15",
+            "name": "[concat(parameters('sites_NewJoinerTaskPutDeleteFunction_name'), '/', parameters('sites_NewJoinerTaskPutDeleteFunction_name'))]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_NewJoinerTaskPutDeleteFunction_name'))]"
+            ],
+            "properties": {
+                "script_root_path_href": "https://newjoinertaskputdeletefunction.azurewebsites.net/admin/vfs/site/wwwroot/NewJoinerTaskPutDeleteFunction/",
+                "script_href": "https://newjoinertaskputdeletefunction.azurewebsites.net/admin/vfs/site/wwwroot/NewJoinerTaskPutDeleteFunction/index.js",
+                "config_href": "https://newjoinertaskputdeletefunction.azurewebsites.net/admin/vfs/site/wwwroot/NewJoinerTaskPutDeleteFunction/function.json",
+                "test_data_href": "https://newjoinertaskputdeletefunction.azurewebsites.net/admin/vfs/data/Functions/sampledata/NewJoinerTaskPutDeleteFunction.dat",
+                "href": "https://newjoinertaskputdeletefunction.azurewebsites.net/admin/functions/NewJoinerTaskPutDeleteFunction",
+                "config": {},
+                "invoke_url_template": "https://newjoinertaskputdeletefunction.azurewebsites.net/api/task/{id:int}",
+                "language": "node",
+                "isDisabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2021-01-15",
+            "name": "[concat(parameters('sites_NewJoinerTaskPutDeleteFunction_name'), '/', parameters('sites_NewJoinerTaskPutDeleteFunction_name'), '.azurewebsites.net')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_NewJoinerTaskPutDeleteFunction_name'))]"
+            ],
+            "properties": {
+                "siteName": "NewJoinerTaskPutDeleteFunction",
+                "hostNameType": "Verified"
+            }
+        }
+    ]
+}

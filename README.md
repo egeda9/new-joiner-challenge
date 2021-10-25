@@ -4,6 +4,7 @@
 - [New Joiner Challenge](#new-joiner-challenge)
   - [Project Description](#project-description)
   - [Preconditions](#preconditions)
+  - [Run the solution locally (Resource to install locally)](#run-the-solution-locally-resource-to-install-locally)
   - [Architecture Design](#architecture-design)
     - [Technology Stack](#technology-stack)
     - [Components Description](#components-description)
@@ -28,6 +29,13 @@ This project aims to create, register and manage some of the tasks that a new co
 - Build an approach based on four services with a specific responsibility.
 - Each service should be created with a different programming language.
 - Software components are deployed over an Microsoft Azure subscription
+
+## Run the solution locally (Resource to install locally)
+
+- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+- [Microsoft SQL Server Express](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
+- [Service Bus Explorer](https://github.com/paolosalvatori/ServiceBusExplorer)
+- [Azure Storage Emulator](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-emulator)
 
 ## Architecture Design
 
@@ -373,6 +381,13 @@ project
   "Languages": "[\"Romanian\",\"Russian\",\"English\",\"French\"]"
 }
 ```
+
+---
+**NOTE**
+
+How to build a golang application: **go build filename.go**
+
+---
 
 - Azure Function 3: Task Microservice. [Link](./doc/az-function-nodejs-deployment.md)
   - Stack: NodeJS

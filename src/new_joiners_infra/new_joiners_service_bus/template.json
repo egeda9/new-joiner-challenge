@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "namespaces_njc_sbs_joiner_name": {
+            "defaultValue": "njc-sbs-joiner",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.ServiceBus/namespaces",
+            "apiVersion": "2021-06-01-preview",
+            "name": "[parameters('namespaces_njc_sbs_joiner_name')]",
+            "location": "East US",
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic"
+            },
+            "properties": {
+                "disableLocalAuth": false,
+                "zoneRedundant": false
+            }
+        }
+    ]
+}
