@@ -43,7 +43,7 @@ This project aims to create, register and manage some of the tasks that a new co
   - [Azure Functions](https://azure.microsoft.com/en-us/services/functions/)
   - [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-messaging-overview)
   - [Azure SQL Server](https://azure.microsoft.com/en-us/products/azure-sql/database/)
-  - [Azure Data Factory](https://docs.microsoft.com/en-us/azure/data-factory/).
+  - [Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction).
 
 ### Components Description
 
